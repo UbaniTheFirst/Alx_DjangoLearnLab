@@ -29,6 +29,11 @@
             border: 1px solid #ddd;
             border-radius: 3px;
         }
+        .errorlist {
+            color: red;
+            list-style: none;
+            padding: 0;
+        }
         button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -51,17 +56,12 @@
 <body>
     <h1>{% if book %}Edit Book{% else %}Add New Book{% endif %}</h1>
     
+    <!-- Secure form with CSRF token -->
     <form method="post">
         {% csrf_token %}
         
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" value="{% if book %}{{ book.title }}{% endif %}" required>
-        
-        <label for="author">Author:</label>
-        <input type="text" id="author" name="author" value="{% if book %}{{ book.author }}{% endif %}" required>
-        
-        <label for="publication_year">Publication Year:</label>
-        <input type="number" id="publication_year" name="publication_year" value="{% if book %}{{ book.publication_year }}{% endif %}" required>
+        <!-- Using Django form for automatic validation and XSS protection -->
+        {{ form.as_p }}
         
         <button type="submit">{% if book %}Update Book{% else %}Create Book{% endif %}</button>
     </form>
