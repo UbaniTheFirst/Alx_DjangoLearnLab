@@ -99,23 +99,33 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ===========================
 # Security Settings (Tasks 2 & 3)
+# ===========================
+
+# Browser Security Headers
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# For local development (change in production)
+# Proxy Configuration
+# Tells Django to trust the X-Forwarded-Proto header from the proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Development Settings (change for production)
 DEBUG = True
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
-# CSRF and Session settings
+# CSRF and Session Cookie Settings
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Strict'
 SESSION_COOKIE_SAMESITE = 'Strict'
 
-# For production, uncomment these:
+# ===========================
+# Production Settings (Uncomment for deployment)
+# ===========================
 # DEBUG = False
 # SECURE_SSL_REDIRECT = True
 # SESSION_COOKIE_SECURE = True
@@ -123,4 +133,4 @@ SESSION_COOKIE_SAMESITE = 'Strict'
 # SECURE_HSTS_SECONDS = 31536000
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # SECURE_HSTS_PRELOAD = True
-# ALLOWED_HOSTS = ['yourdomain.com']
+# ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
