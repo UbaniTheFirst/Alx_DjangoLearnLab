@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 { color: #333; }
+        .book-item {
+            background: #f4f4f4;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        button, a {
+            padding: 5px 10px;
+            margin-right: 5px;
+            text-decoration: none;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover, a:hover { background: #0056b3; }
+        .delete-btn { background: #dc3545; }
+        .delete-btn:hover { background: #c82333; }
+    </style>
+</head>
+<body>
+    <h1>Book List</h1>
+    
+    {% if perms.bookshelf.can_create %}
+        <a href="{% url 'create_book' %}">Add New Book</a>
+    {% endif %}
+    
+    <div style="margin-top: 20px;">
+        {% if books %}
+            {% for book in books %}
+                <div class="book-item">
+                    <h3>{{ book.title }}</h3>
+                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>Year:</strong> {{ book.publication_year }}</p>
+                    
+                    <div class="actions">
+                        {% if perms.bookshelf.can_edit %}
+                            <a href="{% url 'edit_book' book.pk %}">Edit</a>
+                        {% endif %}
+                        
+                        {% if perms.bookshelf.can_delete %}
+                            <form method="post" action="{% url 'delete_book' book.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No books available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
