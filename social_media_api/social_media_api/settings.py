@@ -73,10 +73,14 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL', default='sqlite:///db.sqlite3'),
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': config('DATABASE_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': config('DATABASE_NAME', default=BASE_DIR / 'db.sqlite3'),
+        'USER': config('DATABASE_USER', default=''),
+        'PASSWORD': config('DATABASE_PASSWORD', default=''),
+        'HOST': config('DATABASE_HOST', default=''),
+        'PORT': config('DATABASE_PORT', default=''),
+    }
 }
 
 
@@ -116,10 +120,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Use WhiteNoise for serving static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media files (user uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# For AWS S3 (optional - uncomment when using S3)
+# AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default='')
+# AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default='')
+# AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default='')
+# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+# AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+# AWS_DEFAULT_ACL = 'public-read'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
